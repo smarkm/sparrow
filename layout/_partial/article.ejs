@@ -1,0 +1,41 @@
+<% if(index){ %>
+    <br><br>
+   <h2 class="post-title"><%- post.title %></h2>
+   <hr>
+   <div class="" style="margin-left:60px;">
+        <%- post.date %>
+        <%- post.content %>
+        <hr>
+        <%
+        var tags = [];
+        post.tags.forEach(function(tag){
+            tags.push('<a href="' + config.root + tag.path + '" class="button small">' + tag.name + '</a>');
+        });
+        %>
+        
+        <div class="tags">
+                <a href="tags">
+                    <span class="glyphicon glyphicon-tags">&nbsp;</span> 
+                </a><%- tags.join(' ') %>
+                &nbsp;
+                <a href="categorys">
+                    <span class="glyphicon glyphicon-folder-open"></span> 
+                </a>
+        </div>
+    </div> 
+<% }else{ %>
+    <section class='post-content'>
+        <%- post.title %>
+    </section>
+    //评论部分，post.comments判断是否开启评论，config.duoshuo_shortname
+    和config.disqus_shortname来判断启用那种评论插件，这里优先判断了多说
+    <% if(post.comments){ %>
+        <section id="comments">
+        <% if (config.duoshuo_shortname){ %>
+                <%- partial('_partial/duoshuo') %>
+            <% }else if(config.disqus_shortname){ %>
+                <%- partial('_partial/disqus') %>
+            <% } %>
+        </section>
+    <% } %>
+<% } %>

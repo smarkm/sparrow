@@ -1,2 +1,1 @@
-# sparrow
-A Hexo theme
+an Hexo theme
