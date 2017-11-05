@@ -1,1 +1,28 @@
-<%- partial('_partial/article', {index: false, post: page}) %>
+<h2  ><a class="post-title"  href="<%- url_for(page.path) %>"><%- page.title %></a></h2>
+<hr>
+<div class="" style="margin-left:60px;">
+     <%- page.date %>
+     <%- page.content %>
+     <hr>
+     <%
+     var tags = [];
+     page.tags.forEach(function(tag){
+         tags.push('<a href="' + config.root + tag.path + '" class="button small">' + tag.name + '</a>');
+     });
+     var categories = [];
+     page.categories.forEach(function(category){
+         categories.push('<a href="' + config.root + category.path + '" class="button small">' + category.name + '</a>');
+     });
+     %>
+     
+     <div class="tags">
+             <a href="tags">
+                 <span class="glyphicon glyphicon-tags">&nbsp;</span> 
+             </a><%- tags.join(' ') %>
+             &nbsp;
+             <a href="categories">
+                 <span class="glyphicon glyphicon-folder-open"></span> 
+                 <%- categories.join(' ') %>
+             </a>
+     </div>
+ </div> 

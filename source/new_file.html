@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Retrying HTTP Requests In Spring Cloud Netflix</title>
+	
+	<meta name="author" content="Ryan J Baxter">
+
+	<!-- Enable responsive viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Le styles -->
+	<link href="/assets/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/resources/syntax/syntax.css" rel="stylesheet">
+	<link href="/assets/css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" type="text/css" href="fa/css/font-awesome.min.css"/>
+		<style>
+			.sidebar-header{text-align: center;font-family: Helvetica Neue,Helvetica,Arial,sans-serif;}
+			
+		</style>
+	<!-- Le fav and touch icons -->
+	<!-- Update these with your own images
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+	-->
+
+	<link rel="alternate" type="application/rss+xml" title="" href="/feed.xml">
+</head>
+
+<body>
+	<nav class="navbar navbar-default visible-xs" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://github.com/ryanjbaxter">
+				<i class="fa fa-github"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="http://twitter.com/ryanjbaxter">
+				<i class="fa fa-twitter"></i>
+			</a>
+			
+			
+			<a type="button" class="navbar-toggle nav-link" href="mailto:ryan@ryanjbaxter.com">
+				<i class="fa fa-envelope"></i>
+			</a>
+			
+			<a class="navbar-brand" href="/">
+				<img src="http://www.gravatar.com/avatar/53a1e8497bf6bce5a4dd2b7674929d57?s=35" class="img-circle" />
+				
+			</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Home</a></li>
+				<li><a href="/categories.html">Categories</a></li>
+				<li><a href="/tags.html">Tags</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav>
+
+	<!-- nav-menu-dropdown -->
+	<div class="btn-group hidden-xs" id="nav-menu" style="position: fixed;top: 45px;right: 45px;">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			<i class="fa fa-bars"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+			<li><a href="/categories.html"><i class="fa fa-folder"></i>Categories</a></li>
+			<li><a href="/tags.html"><i class="fa fa-tags"></i>Tags</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="fa fa-arrow-up"></i>Top of Page</a></li>
+		</ul>
+	</div>
+
+	<div class="col-sm-3 sidebar hidden-xs">
+		<!-- sidebar.html -->
+<header class="sidebar-header" role="banner">
+	<a href="/">
+		<img src="http://www.gravatar.com/avatar/53a1e8497bf6bce5a4dd2b7674929d57?s=150" class="img-circle" />
+	</a>
+	<h3 class="title">
+        <a href="/"></a>
+    </h3>
+</header>
+
+
+<div id="bio" class="text-center">
+	Husband, Father, Software Engineer
+</div>
+
+
+<div id="contact-list" class="text-center">
+	<ul class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://github.com/ryanjbaxter">
+				<i class="fa fa-github-alt fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://twitter.com/ryanjbaxter">
+				<i class="fa fa-twitter fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="mailto:ryan@ryanjbaxter.com">
+				<i class="fa fa-envelope fa-lg"></i>
+			</a>
+		</li>
+		
+	</ul>
+	<ul id="contact-list-secondary" class="list-unstyled list-inline">
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://pinterest.com/rbaxter85">
+				<i class="fa fa-pinterest fa-lg"></i>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="https://linkedin.com/in/ryanjbaxter">
+				<i class="fa fa-linkedin fa-lg"></i>
+			</a>
+		</li>
+		
+		<li>
+			<a class="btn btn-default btn-sm" href="/feed.xml">
+				<i class="fa fa-rss fa-lg"></i>
+			</a>
+		</li>
+	</ul>
+</div>
+<!-- sidebar.html end -->
+
+	</div>
+
+	<div class="col-sm-9 col-sm-offset-3">
+		<div class="page-header">
+  <h1>Retrying HTTP Requests In Spring Cloud Netflix </h1>
+</div>
+	
+<article>
+
+	<div class="col-sm-10">
+	 <span class="post-date">
+	   
+	   March 
+	   15th,
+	   
+	   2017
+	 </span>
+	  <div class="article_body">
+	  <p>As I have talked about before, one of the key aspects of cloud native applications is resiliency.  In order to be robust and avoid all the potential problems that can come from running in  such a volatile environment like the cloud your application needs to be able to handle anything that can be thrown at it.  One of the more common operations a cloud native application will do is make HTTP requests to other applications.  These applications may be under your control as well or they could be third party apps, but in the end it doesn’t really matter who controls them, there is always the potential for failure when making any kind of network request.</p>
+
+<p>Cloud native apps should be able to deal with any kind of failure in a graceful manor.  Circuit breakers, which I have talked about <a href="http://ryanjbaxter.com/2015/10/12/building-cloud-native-apps-with-spring-part-5/">before</a>, are one way of dealing with failures.  Before we get to the point of tripping a circuit breaker, we can try to be a smarter about the network requests we make.  Just because a network request fails once doesn’t mean we should give up and all hope is lost.</p>
+
+<p>Network requests can fail for a number of reasons.  Yes the service you may be making a request to may be down, which is probably the worst case scenario, but there are other reasons as well.  Maybe it is just the network itself having issues.  Maybe the service you are trying to make a request to is actually up but is temporarily unavailable.  Whatever the reason may be for the failure, it could be a short term issue.  If you were to make the same request shortly after the failure occurs it may succeed.  So in order to make our applications more resilient we can retry failed requests in the hope that subsequent requests might succeed.</p>
+
+<p>If you are familiar with Spring Cloud Netflix, there are a number ways to make HTTP requests.  The three main ways are using a <a href="http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_spring_resttemplate_as_a_load_balancer_client">load balanced <code class="highlighter-rouge">RestTemplate</code></a>, <a href="http://cloud.spring.io/spring-cloud-static/Camden.SR5/#spring-cloud-feign">Feign</a>, and <a href="http://cloud.spring.io/spring-cloud-static/Camden.SR5/#_router_and_filter_zuul">Zuul</a>.  In Spring Cloud Brixton all three of these scenarios leveraged an HTTP client from Netflix that has built-in logic to retry failed requests.  However, this HTTP client was deprecated and we needed to come up with our own HTTP client to use.  Unfortunately when implementing the new HTTP client we did not originally include logic to retry failed requests.  As of <a href="https://spring.io/blog/2017/03/10/spring-cloud-camden-sr6-is-available">Spring Cloud Camden.SR6</a> all three use cases now once again have logic to retry failed requests.</p>
+
+<p>To achieve this we leveraged <a href="https://github.com/spring-projects/spring-retry">Spring Retry</a> as an easy way of implementing the retry logic.  Because we leverage Spring Retry, you must make sure Spring Retry is on the classpath of your application in order to enable the retry logic.  Without Spring Retry on the classpath you will find that failed requests will not be retried.</p>
+
+<p>You can control how many times a request is retried using standard Ribbon properties.
+To control how many times a request is retried on the same server you can adjust <code class="highlighter-rouge">sample-client.ribbon.MaxAutoRetries</code>.  To control how many servers to try you can adjust <code class="highlighter-rouge">sample-client.ribbon.MaxAutoRetriesNextServer</code>.  The total number of retries that are made will be equal to <code class="highlighter-rouge">sample-client.ribbon.MaxAutoRetries * sample-client.ribbon.MaxAutoRetriesNextServer</code>.  You can also control whether just <code class="highlighter-rouge">GET</code> requests will be retried or whether all requests will be retried by adjusting <code class="highlighter-rouge">sample-client.ribbon.OkToRetryOnAllOperations</code>.  The above properties apply whether you are using a load balanced <code class="highlighter-rouge">RestTemplate</code>, Feign, or Zuul.</p>
+
+<p>When using Zuul there are some additional properties you can configure to control retry functionality.  Setting <code class="highlighter-rouge">zuul.retryable</code> to <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code> will control whether all or none of the proxied requests will be retried.  By default it is set to <code class="highlighter-rouge">true</code>.  You can also control retry functionality on a route by route basis by setting <code class="highlighter-rouge">zuul.routes.routename.retryable</code>.</p>
+
+<p>If you have been sticking to using the deprecated Netflix <code class="highlighter-rouge">RestClient</code> due to the lack of retry logic in the newer HTTP clients hopefully this will now allow you to switch to using the newer clients.  The retry logic we have added should work for both the Apache based HTTP clients of the OK HTTP clients, so you have your choice as to which one you want to use.</p>
+
+	  </div>
+
+		
+		<ul class="tag_box list-unstyled list-inline">
+		  <li><i class="fa fa-folder-open"></i></li>
+		  
+		  
+			 
+				<li><a href="/categories.html#Cloud-ref">
+					Cloud <span>(83)</span>
+					,
+				</a></li>
+			 
+				<li><a href="/categories.html#Spring Cloud-ref">
+					Spring Cloud <span>(6)</span>
+					,
+				</a></li>
+			 
+				<li><a href="/categories.html#Spring-ref">
+					Spring <span>(11)</span>
+					
+				</a></li>
+			
+		  
+		</ul>
+		  
+
+		  
+
+		<hr>
+
+		<div>
+      <section class="share col-sm-6">
+        <h4 class="section-title">Share Post</h4>
+        <a class="btn btn-default btn-sm twitter" href="http://twitter.com/share?text=Retrying HTTP Requests In Spring Cloud Netflix&via=ryanjbaxter"
+           onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+          <i class="fa fa-twitter fa-lg"></i>
+          Twitter
+        </a>
+        <a class="btn btn-default btn-sm facebook" href="https://www.facebook.com/sharer/sharer.php"
+           onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+          <i class="fa fa-facebook fa-lg"></i>
+          Facebook
+        </a>
+        <a class="btn btn-default btn-sm gplus"
+           onclick="window.open('https://plus.google.com/share?url='+window.location.href, 'google-plus-share', 'width=490,height=530');return false;">
+          <i class="fa fa-google-plus fa-lg"></i>
+          Google+
+        </a>
+      </section>
+
+      <section class="col-sm-6 author">
+        <img src="http://www.gravatar.com/avatar/53a1e8497bf6bce5a4dd2b7674929d57" class="img-rounded author-image" />
+        <h4 class="section-title author-name">Ryan J Baxter</h4>
+        <p class="author-bio">Husband, Father, Software Engineer</p>
+      </section>
+    </div>
+
+    <div class="clearfix"></div>
+
+		<ul class="pager">
+		  
+		  <li class="previous"><a href="/cloud/spring%20cloud/spring/2017/01/05/eureka-eviction.html" title="Evicting Instances From Eureka">&larr; Previous</a></li>
+		  
+		  
+			<li class="next disabled"><a>Next &rarr;</a>
+		  
+		</ul>
+
+		<hr>
+	</div>
+	
+	<div class="col-sm-2 sidebar-2">
+	
+	</div>
+</article>
+<div class="clearfix"></div>
+
+
+
+    
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'ryanjbaxter';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+		<footer>
+			<hr/>
+			<p>
+				&copy; 2017 Ryan J Baxter with Jekyll. Theme: <a href="https://github.com/dbtek/dbyll">dbyll</a> by dbtek.
+			</p>
+		</footer>
+	</div>
+
+	<script type="text/javascript" src="/assets/resources/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/resources/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/assets/js/app.js"></script>
+</body>
+</html>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script>
+  var _gaq = _gaq || [];
+  var pluginUrl =
+ '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', 'UA-65417465-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+

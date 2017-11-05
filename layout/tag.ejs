@@ -1,0 +1,35 @@
+<br><br>
+<h3 class="post-title">标签</h3>
+<hr/>
+
+<div class="col-sm-3 col-xs-6">
+    <ul class="nav nav-tabs-vertical">
+        <% site.tags.each(function(tag, index){ %>
+            <li class="">
+                    <a href="/<%- tag.path %>" >
+                        <%- tag.name %><span class="badge pull-right"><%- tag.length %></span>
+                   </a>
+                </li>
+            
+        <% }) %>
+      
+   </ul>
+</div>
+<div class="tab-content col-sm-9 col-xs-6">
+    <div class="tab-pane active" id="Expeditor-ref">
+      <h3 style="margin-top: 0px"><%- page.tag %>标签下的文章 </h3>
+      <ul class="list-unstyled">
+        <% var lastyear; %>
+        <% page.posts.each(function(post){ %>
+          <% var year = post.date.year() %>
+          <% if(lastyear !== year){ %>
+            <% lastyear = year %>
+          <% } %>
+          <div class="archive_item">
+            <a class="title" href="<%- url_for(post.path) %>"><%= post.title %></a>
+            <span class="date"> - <%= post.date.format('YYYY-MM-DD') %></span>
+          </div>
+        <% }) %>
+      </ul>
+    </div>
+</div>

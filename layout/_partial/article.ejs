@@ -1,6 +1,6 @@
 <% if(index){ %>
     <br><br>
-   <h2 class="post-title"><%- post.title %></h2>
+   <h2  ><a class="post-title"  href="<%- url_for(post.path) %>"><%- post.title %></a></h2>
    <hr>
    <div class="" style="margin-left:60px;">
         <%- post.date %>
@@ -11,6 +11,10 @@
         post.tags.forEach(function(tag){
             tags.push('<a href="' + config.root + tag.path + '" class="button small">' + tag.name + '</a>');
         });
+        var categories = [];
+        post.categories.forEach(function(category){
+            categories.push('<a href="' + config.root + category.path + '" class="button small">' + category.name + '</a>');
+        });
         %>
         
         <div class="tags">
@@ -18,17 +22,17 @@
                     <span class="glyphicon glyphicon-tags">&nbsp;</span> 
                 </a><%- tags.join(' ') %>
                 &nbsp;
-                <a href="categorys">
+                <a href="categories">
                     <span class="glyphicon glyphicon-folder-open"></span> 
+                    <%- categories.join(' ') %>
                 </a>
         </div>
     </div> 
 <% }else{ %>
     <section class='post-content'>
-        <%- post.title %>
     </section>
-    //评论部分，post.comments判断是否开启评论，config.duoshuo_shortname
-    和config.disqus_shortname来判断启用那种评论插件，这里优先判断了多说
+    <%- list_tags({show_count: theme.show_count}) %>
+        argicle else
     <% if(post.comments){ %>
         <section id="comments">
         <% if (config.duoshuo_shortname){ %>
