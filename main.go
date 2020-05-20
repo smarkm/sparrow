@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"log"
 	"time"
 
 	splitcs "github.com/servicemeshinterface/smi-sdk-go/pkg/gen/client/split/clientset/versioned"
@@ -37,13 +36,20 @@ func main() {
 	if err != nil {
 		klog.Fatal("Error build split client: %s", err.Error())
 	}
-	kInformerFactgory := informers.NewSharedInformerFactory(kclient, time.Second*30)
+	kInformerFactory := informers.NewSharedInformerFactory(kclient, time.Second*30)
 	splitInformerFactory := splitinformers.NewSharedInformerFactory(splitClient, time.Second*1)
 
 	//new smi controller here
+	splitcontroller := NewSplitController(kclient, splitClient,
+		kInformerFactory.Apps().V1().Deployments(),
+		splitInformerFactory.Split().V1alpha3().TrafficSplits())
 
-	kInformerFactgory.Start(stopCh)
+	kInformerFactory.Start(stopCh)
 	splitInformerFactory.Start(stopCh)
 
-	log.Println(stopCh, kclient, splitClient, kInformerFactgory)
+	if err = splitcontroller.Run(2, stopCh); err != nil {
+		klog.Fatal("Error run split controller: %s", err.Error())
+	}
+
+	<-stopCh
 }

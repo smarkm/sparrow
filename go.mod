@@ -4,6 +4,8 @@ go 1.13
 
 require (
 	github.com/servicemeshinterface/smi-sdk-go v0.3.0
+	k8s.io/api v0.18.2
+	k8s.io/apimachinery v0.18.2
 	k8s.io/client-go v0.18.2
 	k8s.io/heapster v1.5.4 // indirect
 	k8s.io/klog v1.0.0
