@@ -26,5 +26,5 @@ gen-server-all:
 rm-server-ca:
 	rm -rf server*
 deploy-test:
-	kubectl create deployment nginx --image nginx:1.17 --dry-run -n sparrow-system 
-	#-oyaml
+	kubectl create deployment nginx --image nginx:1.17  -n sparrow-system 	
+	#-oyaml	

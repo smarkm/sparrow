@@ -3,20 +3,19 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: nginx
+    run: nginx
   name: nginx
-  namespace: sparrow-system
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      run: nginx
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: nginx
+        run: nginx
     spec:
       containers:
       - image: nginx:1.17
